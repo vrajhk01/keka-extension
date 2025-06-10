@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Keka Shift Settings",
+  "version": "1.0",
+  "description": "Customize your work shift duration for Keka attendance system",
+  "icons": {
+    "16": "images/icon.svg",
+    "48": "images/icon.svg",
+    "128": "images/icon.svg"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon.svg",
+      "48": "images/icon.svg",
+      "128": "images/icon.svg"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.keka.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "permissions": ["activeTab", "storage", "tabs"]
+} 
