@@ -10,13 +10,12 @@ A Chrome extension that enhances the Keka attendance experience by providing rea
 FEATURES
 
 - Real-time tracking of effective, gross, and break time
-- Hoverable attendance logs with grouped punch-in/out entries
-- Work completion progress bar with percentage (up to 2 decimals)
-- Progress label automatically changes to 'Completed' at 100%
+- Attendance logs can be seen directly on Hover, without the need to reload the whole site
+- Work completion progress bar with percentage
 - Browser notification when work duration is completed
-- Manual refresh for attendance logs without reloading Keka
 - Customizable working hours and break handling
-- Punch In / Punch Out status indicator on profile icon
+- Clock In / Clock Out status indicator on profile icon
+- Manual refresh for attendance logs and clock in/out status without reloading Keka
 - Works outside Attendance page
 - Adapts to Keka light/dark theme and 12/24-hour format
 
@@ -34,7 +33,7 @@ INSTALLATION
 3. Enable Developer Mode
 4. Click Load unpacked
 5. Select the project folder
-6. Open Keka Attendance page
+6. Open your organization's Keka site
 
 HOW IT WORKS
 
