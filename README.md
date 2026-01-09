@@ -13,7 +13,7 @@ FEATURES
 - Attendance logs can be seen directly on Hover, without the need to reload the whole site
 - Work completion progress bar with percentage
 - Browser notification when work duration is completed
-- Customizable working hours and break handling
+- Customizable working hours and break time handling
 - Clock In / Clock Out status indicator on profile icon
 - Manual refresh for attendance logs and clock in/out status without reloading Keka
 - Works outside Attendance page
