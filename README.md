@@ -1,3 +1,8 @@
+## Keywords
+
+Keka attendance tracker, Keka Chrome extension, Keka time tracker,
+work hours tracker, attendance progress tracker, Keka productivity tool
+
 # Keka Time Tracker Extension
 
 A Chrome extension that enhances the Keka attendance experience by providing real-time work tracking, instant attendance insights, and customizable work time settings — without waiting for page refreshes.
