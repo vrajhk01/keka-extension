@@ -1,45 +1,49 @@
 # Keka Time Tracker Extension
 
-A Chrome extension that enhances the Keka attendance system by showing remaining work time based on your punches and allowing you to customize your shift duration.
+A Chrome extension that enhances the Keka attendance experience by providing real-time work tracking, instant attendance insights, and customizable work time settings — without waiting for page refreshes.
 
-## Features
+FEATURES
 
-- Shows time fulfilled, time remaining, and completion percentage directly in the Keka interface
-- Calculates time fulfilled by summing up precise punch-in/out logs with second-level accuracy
-- Displays time information directly in the Keka Actions card
-- Styled to match Keka's interface in both light and dark themes
-- Shows "Not punched in yet" status for new days when user hasn't clocked in
-- Updates in real-time with second-by-second calculations
-- Automatically adjusts expected checkout time based on breaks
-- Respects Keka's 24-hour format toggle setting
+- Real-time tracking of effective, gross, and break time
+- Hoverable attendance logs with grouped punch-in/out entries
+- Work completion progress bar with percentage (up to 2 decimals)
+- Progress label automatically changes to 'Completed' at 100%
+- Browser notification when work duration is completed
+- Manual refresh for attendance logs without reloading Keka
+- Customizable working hours and break handling
+- Punch In / Punch Out status indicator on profile icon
+- Works outside Attendance page
+- Adapts to Keka light/dark theme and 12/24-hour format
 
-## Shift Settings
+WORK TIME SETTINGS
 
-The extension provides a simple popup where you can customize your work shift duration:
+- Default work duration: 8 hours 30 minutes
+- Customize work hours and minutes
+- Option to include or exclude break time
+- Enable or disable completion notifications
 
-- By default, the extension uses Keka's standard work duration (8.5 hours)
-- You can enable custom work duration and set your own hours and minutes
+INSTALLATION
 
-## Installation
+1. Download or clone the repository
+2. Open chrome://extensions
+3. Enable Developer Mode
+4. Click Load unpacked
+5. Select the project folder
+6. Open Keka Attendance page
 
-1. Load the extension in Chrome's developer mode
-2. Navigate to your Keka attendance page
-3. You'll see the time tracker display automatically integrated into the Keka interface
+HOW IT WORKS
 
-## Accessing Shift Settings
+- Reads attendance logs using Keka internal APIs (read-only)
+- Calculates time with second-level accuracy
+- Updates UI in real time
+- Displays data via navbar chip and hover dropdown
+- Sends notification once per work session
 
-Click the extension icon in Chrome to access the shift duration settings.
+PRIVACY
 
-## How it Works
+- No data is sent to external servers
+- All calculations happen locally
+- Uses your existing Keka session only
 
-The extension:
-1. Detects when you're on the Keka attendance page
-2. Reads your punch data without interfering with the UI
-3. Calculates your worked time with second precision
-4. Shows time remaining based on your shift settings
-5. Updates in real-time
-6. Adjusts expected checkout time based on breaks between punches
-
-## Credits
-
-Created as a productivity tool for Keka users. 
+CREDITS
+Created as a productivity enhancement for Keka users.

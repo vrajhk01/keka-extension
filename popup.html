@@ -1,185 +1,402 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Keka Shift Settings</title>
-  <style>
-    body {
-      width: 300px;
-      padding: 20px;
-      margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-      color: #333;
-      background-color: #f5f7f9;
-    }
-    
-    .container {
-      text-align: center;
-    }
-    
-    h2 {
-      font-size: 18px;
-      color: #333;
-      margin-top: 0;
-      margin-bottom: 16px;
-      font-weight: 600;
-    }
-    
-    .status {
-      font-size: 12px;
-      color: #666;
-      margin-top: 15px;
-      text-align: center;
-      padding: 8px;
-      background-color: #e9ecef;
-      border-radius: 4px;
-    }
-    
-    /* Settings panel styles */
-    .settings-panel {
-      text-align: left;
-      border-radius: 8px;
-      padding: 16px;
-      border: 1px solid #e0e4e8;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      background-color: white;
-    }
-    
-    .setting-group {
-      margin-bottom: 18px;
-    }
-    
-    .setting-group h3 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      font-size: 14px;
-      color: #333;
-      font-weight: 500;
-    }
-    
-    .form-group {
-      margin-bottom: 15px;
-    }
-    
-    .form-group label {
-      display: flex;
-      align-items: center;
-      margin-bottom: 5px;
-      font-size: 14px;
-      font-weight: 400;
-    }
-    
-    .form-group label input[type="checkbox"] {
-      margin-right: 8px;
-      width: 16px;
-      height: 16px;
-      accent-color: #64c3d1;
-    }
-    
-    .time-inputs {
-      display: flex;
-      align-items: center;
-      margin-top: 8px;
-    }
-    
-    .time-inputs input[type="number"] {
-      width: 60px;
-      padding: 8px;
-      border: 1px solid #e0e4e8;
-      border-radius: 4px;
-      margin-right: 8px;
-      font-size: 14px;
-    }
-    
-    .time-inputs input[type="number"]:focus {
-      outline: none;
-      border-color: #64c3d1;
-      box-shadow: 0 0 0 2px rgba(100, 195, 209, 0.2);
-    }
-    
-    .time-inputs input[type="number"] {
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    
-    .time-inputs span {
-      margin-right: 15px;
-      font-size: 14px;
-      color: #444;
-    }
-    
-    #customSettingsGroup {
-      transition: opacity 0.2s ease-in-out;
-    }
-    
-    .hint {
-      font-size: 11px;
-      color: #666;
-      margin-top: 5px;
-    }
-    
-    .buttons {
-      margin-top: 20px;
-      text-align: center;
-    }
-    
-    .buttons button {
-      padding: 8px 18px;
-      background-color: #64c3d1;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background-color 0.2s;
-    }
-    
-    .buttons button:hover {
-      background-color: #4aaab8;
-    }
-    
-    .divider {
-      border-top: 1px solid #e0e4e8;
-      margin: 15px 0;
-    }
-  </style>
-</head>
-<body>
-  <div class="settings-panel" id="settingsPanel">
-    <h2>Shift Duration Settings</h2>
-    
-    <div class="setting-group">
-      <div class="form-group">
-        <label>
-          <input type="checkbox" id="useCustomSettings">
-          Use custom work duration
-        </label>
+  <head>
+    <title>Keka Shift Settings</title>
+    <style>
+      body {
+        width: 300px;
+        padding: 20px;
+        margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif,
+          "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+          "Noto Color Emoji";
+        color: #333;
+        background-color: #f5f7f9;
+      }
+
+      /* Welcome Screen Styles */
+      .welcome-container {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .subtitle {
+        font-size: 11px;
+        color: #666;
+        margin-bottom: 10px;
+      }
+
+      .info-box {
+        background: #e3f6f7;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        margin-bottom: 15px;
+      }
+
+      .feature-list {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+
+      .feature-list li {
+        margin-bottom: 10px;
+      }
+
+      #continueBtn {
+        padding: 8px 18px;
+        background-color: #64c3d1;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .feature-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .feature-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 13px;
+        margin-bottom: 12px;
+        line-height: 1.4;
+      }
+
+      .icon {
+        width: 18px;
+        height: 18px;
+        stroke: #64c3d1;
+        fill: none;
+        stroke-width: 2;
+        flex-shrink: 0;
+      }
+
+      /* Settings Panel Styles */
+      .container {
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 18px;
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 16px;
+        font-weight: 600;
+      }
+
+      .status {
+        font-size: 12px;
+        color: #666;
+        margin-top: 15px;
+        text-align: center;
+        padding: 8px;
+        background-color: #e9ecef;
+        border-radius: 4px;
+      }
+
+      /* Settings panel styles */
+      .settings-panel {
+        text-align: left;
+        border-radius: 8px;
+        padding: 16px;
+        border: 1px solid #e0e4e8;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        background-color: white;
+      }
+
+      .setting-group {
+        margin-bottom: 18px;
+      }
+
+      .setting-group h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #333;
+        font-weight: 500;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        font-size: 14px;
+        font-weight: 400;
+      }
+
+      .form-group label input[type="checkbox"] {
+        margin-right: 8px;
+        width: 16px;
+        height: 16px;
+        accent-color: #64c3d1;
+      }
+
+      .time-inputs {
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+      }
+
+      .time-inputs input[type="number"] {
+        width: 60px;
+        padding: 8px;
+        border: 1px solid #e0e4e8;
+        border-radius: 4px;
+        margin-right: 8px;
+        font-size: 14px;
+      }
+
+      .time-inputs input[type="number"]:focus {
+        outline: none;
+        border-color: #64c3d1;
+        box-shadow: 0 0 0 2px rgba(100, 195, 209, 0.2);
+      }
+
+      .time-inputs input[type="number"] {
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      .time-inputs span {
+        margin-right: 15px;
+        font-size: 14px;
+        color: #444;
+      }
+
+      .hint {
+        font-size: 11px;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .buttons {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .buttons button {
+        padding: 8px 18px;
+        background-color: #64c3d1;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color 0.2s;
+      }
+
+      .buttons button:hover {
+        background-color: #4aaab8;
+      }
+
+      .divider {
+        border-top: 1px solid #e0e4e8;
+        margin: 15px 0;
+      }
+
+      input[type="number"]:disabled {
+        background-color: #f5f7f9;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      input[type="number"]:not(:disabled) {
+        background-color: white;
+      }
+
+      #editDurationIcon:hover {
+        transform: scale(1.1);
+      }
+
+      #editDurationIcon.editing {
+        color: #22c55e;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Welcome Screen -->
+    <div class="welcome-container" id="welcomeScreen">
+      <h2>Welcome to Keka Real-Time Tracker</h2>
+
+      <p class="subtitle">
+        Track your working hours accurately without waiting for Keka to refresh.
+      </p>
+
+      <div class="info-box">
+        You can change all default settings anytime from the settings panel.
       </div>
-      
-      <div id="customSettingsGroup" style="display: none;">
+
+      <ul class="feature-list">
+        <li>
+          <svg class="icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Track your working hours in real time with live updates
+        </li>
+
+        <li>
+          <svg class="icon" viewBox="0 0 24 24">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0114.13-3.36L23 10"></path>
+            <path d="M20.49 15a9 9 0 01-14.13 3.36L1 14"></path>
+          </svg>
+          Attendance logs update instantly. No page reload required
+        </li>
+
+        <li>
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 00-3-3.87"></path>
+            <path d="M4 21v-2a4 4 0 013-3.87"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Track time continuously, even outside the Attendance page
+        </li>
+
+        <li>
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Check Punch In / Punch Out status directly from your profile icon
+        </li>
+
+        <li>
+          <svg class="icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+              d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33"
+            ></path>
+            <path
+              d="M4.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33"
+            ></path>
+          </svg>
+          Set your own working hours and break duration
+        </li>
+
+        <li>
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 01-3.46 0"></path>
+          </svg>
+          Receive browser notifications when your work time is completed
+        </li>
+      </ul>
+
+      <button id="continueBtn">Continue</button>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+      <h2>Work Time Settings</h2>
+      <p class="subtitle">
+        Customize your working hours, breaks, and notifications
+      </p>
+
+      <div class="setting-group">
         <div class="form-group">
-          <label>Work Duration:</label>
+          <label style="justify-content: space-between; cursor: pointer">
+            <span style="display: flex; align-items: center; gap: 8px">
+              Work Duration:
+              <span
+                id="editDurationIcon"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  width: 20px;
+                  height: 20px;
+                  cursor: pointer;
+                  transition: transform 0.2s;
+                "
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#64c3d1"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                  ></path>
+                  <path
+                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                  ></path>
+                </svg>
+              </span>
+            </span>
+          </label>
           <div class="time-inputs">
-            <input type="number" id="workHours" min="0" max="12" step="1">
+            <input
+              type="number"
+              id="workHours"
+              min="0"
+              max="12"
+              step="1"
+              disabled
+            />
             <span>hours</span>
-            <input type="number" id="workMinutes" min="0" max="59" step="1">
+            <input
+              type="number"
+              id="workMinutes"
+              min="0"
+              max="59"
+              step="1"
+              disabled
+            />
             <span>minutes</span>
-          </div>
-          <div class="hint">
-            Standard work duration (default is 8 hours and 30 minutes)
           </div>
         </div>
       </div>
+
+      <div class="divider"></div>
+
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="isBreakTimeIncludedInWorkingHours" />
+          Including Break?
+        </label>
+        <p class="subtitle">
+          By default, Break time is not included in Work duration
+        </p>
+        <p class="subtitle">
+          Check &#10003; if above Work duration includes Break time
+        </p>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="isNotificationEnabled" checked />
+          Receive Notification on Time completion
+        </label>
+      </div>
+
+      <div class="buttons">
+        <button id="saveSettings">Save Settings</button>
+      </div>
     </div>
-    
-    <div class="divider"></div>
-    
-    <div class="buttons">
-      <button id="saveSettings">Save Settings</button>
-    </div>
-  </div>
-  
-  <div class="status" id="status">Waiting for Keka page...</div>
-  
-  <script src="popup.js"></script>
-</body>
-</html> 
+
+    <div class="status" id="status">Waiting for Keka page...</div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

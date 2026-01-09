@@ -1,20 +1,22 @@
 {
   "manifest_version": 3,
-  "name": "Keka Shift Settings",
-  "version": "1.0",
-  "description": "Customize your work shift duration for Keka attendance system",
-  "icons": {
-    "16": "images/icon.svg",
-    "48": "images/icon.svg",
-    "128": "images/icon.svg"
-  },
+  "name": "Keka Real-Time calculation",
+  "version": "2.0",
+  "description": "Accurate effective hours calculation using Keka attendance logs API",
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "images/icon.svg",
-      "48": "images/icon.svg",
-      "128": "images/icon.svg"
+      "16": "images/keka-16.png",
+      "32": "images/keka-32.png",
+      "48": "images/keka-48.png",
+      "128": "images/keka-128.png"
     }
+  },
+  "icons": {
+    "16": "images/keka-16.png",
+    "32": "images/keka-32.png",
+    "48": "images/keka-48.png",
+    "128": "images/keka-128.png"
   },
   "background": {
     "service_worker": "background.js"
@@ -25,5 +27,6 @@
       "js": ["content.js"]
     }
   ],
-  "permissions": ["activeTab", "storage", "tabs"]
-} 
+  "permissions": ["activeTab", "storage", "tabs", "notifications"],
+  "host_permissions": ["https://*.keka.com/*"]
+}
