@@ -39,6 +39,21 @@ document.addEventListener("DOMContentLoaded", function () {
       statusElement.style.color = "#d9534f";
     }
   });
+
+  const githubRepoUrl = "https://github.com/vrajhk01/keka-extension";
+
+  document
+    .getElementById("githubLinkWelcome")
+    ?.addEventListener("click", () => {
+      chrome.tabs.create({ url: githubRepoUrl });
+    });
+
+  document
+    .getElementById("githubLinkSettings")
+    ?.addEventListener("click", () => {
+      chrome.tabs.create({ url: githubRepoUrl });
+    });
+
 });
 
 // Load settings from storage
