@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Keka Time Tracker – Chrome Extension</title>
+    <meta
+      name="description"
+      content="A Chrome extension for real-time Keka attendance tracking with live progress bar, instant logs, notifications, and customizable work hours."
+    />
+
+    <!-- SEO -->
+    <meta
+      name="keywords"
+      content="Keka time tracker, Keka Chrome extension, attendance tracker, work hours tracker, productivity extension"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+        background: #f5f7f9;
+        color: #1f2937;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 48px 24px;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 48px;
+      }
+
+      h1 {
+        font-size: 2.4rem;
+        margin-bottom: 12px;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        color: #4b5563;
+        max-width: 700px;
+        margin: auto;
+      }
+
+      .cta {
+        margin-top: 24px;
+      }
+
+      .cta a {
+        display: inline-block;
+        padding: 12px 24px;
+        background: #64c3d1;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        margin: 8px;
+      }
+
+      .section {
+        margin-bottom: 56px;
+      }
+
+      h2 {
+        font-size: 1.6rem;
+        margin-bottom: 16px;
+      }
+
+      ul {
+        padding-left: 18px;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+      }
+
+      .feature {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      footer {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #6b7280;
+        margin-top: 48px;
+      }
+
+      footer a {
+        color: #64c3d1;
+        text-decoration: none;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Keka Time Tracker</h1>
+        <p class="subtitle">
+          A Chrome extension that enhances Keka attendance with real-time
+          tracking, live progress bar, instant logs, and smart notifications —
+          without waiting for page refreshes.
+        </p>
+        <div class="cta">
+          <a href="https://github.com/vrajhk01/keka-extension" target="_blank"
+            >View on GitHub</a
+          >
+          <a href="#install">Installation</a>
+        </div>
+      </header>
+
+      <section class="section">
+        <h2>Why this extension?</h2>
+        <p>
+          Keka’s attendance page often requires manual refreshes to reflect
+          updated work hours. This extension solves that by providing live
+          calculations, visual progress tracking, and clear insights — directly
+          inside the Keka UI.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>Key Features</h2>
+        <div class="features">
+          <div class="feature">
+            Real-time tracking of effective, gross, and break time with
+            second-level accuracy
+          </div>
+          <div class="feature">
+            Attendance logs can be seen directly on Hover, without the need to
+            reload the whole site
+          </div>
+          <div class="feature">
+            Work completion progress bar with percentage
+          </div>
+          <div class="feature">
+            Browser notification when work duration is completed
+          </div>
+          <div class="feature">
+            Customizable working hours and break time handling
+          </div>
+          <div class="feature">
+            Clock In / Clock Out status indicator on profile icon
+          </div>
+          <div class="feature">
+            Manual refresh for attendance logs and clock in/out status without
+            reloading Keka
+          </div>
+          <div class="feature">Track time even outside the Attendance page</div>
+          <div class="feature">
+            Adapts to Keka’s light/dark theme and 12/24-hour format
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="install">
+        <h2>Installation</h2>
+        <ol>
+          <li>Clone or download the GitHub repository</li>
+          <li>Open <code>chrome://extensions</code> in Chrome</li>
+          <li>Enable <strong>Developer mode</strong></li>
+          <li>
+            Click <strong>Load unpacked</strong> and select the project folder
+          </li>
+          <li>Open your organization's Keka site</li>
+          <li>Click on Extension icon from Top right</li>
+          <li>
+            Find "Keka" icon and Pin it (Configure default settings if needed)
+          </li>
+        </ol>
+      </section>
+
+      <section class="section">
+        <h2>Open Source & Privacy</h2>
+        <ul>
+          <li>No data is sent to external servers</li>
+          <li>All calculations are performed locally in your browser</li>
+          <li>Uses your existing authenticated Keka session</li>
+          <li>Source code is fully open on GitHub</li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>
+          Built as a productivity-focused enhancement for Keka users.<br />
+          <a href="https://github.com/vrajhk01/keka-extension" target="_blank"
+            >GitHub Repository</a
+          >
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
