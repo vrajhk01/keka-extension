@@ -1148,7 +1148,7 @@ function maybeNotifyIfDone(metrics, isPunchedIn) {
     chrome.runtime.sendMessage({
       action: "SHOW_NOTIFICATION",
       title: "Work hours completed 🎉",
-      body: "You’ve completed your work time. You can punch out now.",
+      body: "You’ve completed your work time. It's time to leave 🏡.",
     });
 
     notificationSentForSession = true;
