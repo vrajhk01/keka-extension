@@ -34,6 +34,8 @@ INSTALLATION
 4. Click Load unpacked
 5. Select the project folder
 6. Open your organization's Keka site
+7. Click on Extension icon from Top right
+8. Find "Keka" icon and Pin it (Configure default settings if needed)
 
 HOW IT WORKS
 
