@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Keka Real-Time calculation",
+  "name": "Keka Time Tracker",
   "version": "2.0",
-  "description": "Accurate effective hours calculation using Keka attendance logs API",
+  "description": "Real-time Keka attendance tracking with accurate work-hour calculations, progress insights, and completion notifications.",
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
