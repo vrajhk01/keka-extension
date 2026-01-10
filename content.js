@@ -163,7 +163,7 @@ function calculateMetricsFromApiLogs(logs) {
       effectiveMs: 0,
       grossMs: 0,
       breakMs: 0,
-      expectedCheckout: "Not punched in",
+      expectedCheckout: "--:--:--",
     };
   }
 
@@ -214,7 +214,7 @@ function calculateMetricsFromApiLogs(logs) {
   // ⚠️ isPunchedIn should come from ClockInDetailsForToday
   const isPunchedIn = openIn !== null;
 
-  let expectedCheckout = "Not punched in";
+  let expectedCheckout = "--:--:--";
 
   if (firstPunchTime) {
     const totalWorkMs = getCurrentTotalWorkMinutes() * 60000;
@@ -1257,19 +1257,24 @@ function ensureTimerIsRunning() {
       return;
     }
 
+    if (!cachedAttendanceLogs || cachedAttendanceLogs.length === 0) {
+      runningGrossMs = 0;
+      runningEffectiveMs = 0;
+      lastTickTs = Date.now();
+      scheduleNextTick();
+      return;
+    }
+
     const now = Date.now();
     const delta = now - lastTickTs;
     lastTickTs = now;
 
-    // Gross always increases
-    runningGrossMs += delta;
-
     // Effective increases only when punched in
-    const isPunchedIn = cachedAttendanceLogs.some(
-      (l) => l.punchStatus === 0
-    );
+    const lastLog = cachedAttendanceLogs[cachedAttendanceLogs.length - 1];
+    const isPunchedIn = lastLog && lastLog.punchStatus === 0;
 
     if (isPunchedIn) {
+      runningGrossMs += delta;
       runningEffectiveMs += delta;
     }
 
