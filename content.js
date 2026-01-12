@@ -22,6 +22,7 @@ let checkInTime = "";
 let runningGrossMs = 0;
 let runningEffectiveMs = 0;
 let lastTickTs = null;
+let isCurrentlyPunchedIn = false;
 
 const themeColors = {
   dark: {
@@ -228,10 +229,10 @@ function calculateMetricsFromApiLogs(logs) {
         new Date() >= checkoutTime
           ? "Completed"
           : formatTimeWithAmPm(
-            checkoutTime.getHours(),
-            checkoutTime.getMinutes(),
-            checkoutTime.getSeconds()
-          );
+              checkoutTime.getHours(),
+              checkoutTime.getMinutes(),
+              checkoutTime.getSeconds()
+            );
 
     } else {
       // ❌ Break EXCLUDED
@@ -244,10 +245,10 @@ function calculateMetricsFromApiLogs(logs) {
         new Date() >= checkoutTime
           ? "Completed"
           : formatTimeWithAmPm(
-            checkoutTime.getHours(),
-            checkoutTime.getMinutes(),
-            checkoutTime.getSeconds()
-          );
+              checkoutTime.getHours(),
+              checkoutTime.getMinutes(),
+              checkoutTime.getSeconds()
+            );
     }
   }
 
@@ -635,7 +636,7 @@ function updateNavbarChip(metrics) {
   checkoutSpan.textContent = metrics.expectedCheckout || "N/A";
 
   // Update tooltip with all details
-  // It Blinks every 1 sec, so removed 
+  // It Blinks every 1 sec, so removed
   // const tooltipText = `
   //   Checkin time: ${formattedCheckinTime}
   //   Effective: ${formatTime(effHms.h, effHms.m, effHms.s)}
@@ -947,8 +948,8 @@ function formatLogCell(log) {
     statusText = "MISSING";
     statusColor = "#f59e0b";
     bgColor = theme === "dark"
-      ? "rgba(245, 158, 11, 0.12)"
-      : "rgba(245, 158, 11, 0.18)";
+        ? "rgba(245, 158, 11, 0.12)"
+        : "rgba(245, 158, 11, 0.18)";
   } else {
     icon = "";
     statusText = "UNKNOWN";
@@ -1067,18 +1068,27 @@ async function updateAllDisplays(forceRefresh = false) {
   // Calculate metrics from cached data
   const metrics = calculateMetricsFromApiLogs(cachedAttendanceLogs);
 
-  // Initialize running timers
-  runningGrossMs = metrics.grossMs;
-  runningEffectiveMs = metrics.effectiveMs;
-  lastTickTs = Date.now();
+  // Initialize ONLY if timer not started yet
+  if (lastTickTs === null) {
+    runningGrossMs = metrics.grossMs;
+    runningEffectiveMs = metrics.effectiveMs;
+    lastTickTs = Date.now();
+  }
 
   // Update dropdown with fresh logs
   updateLogsDropdown(cachedAttendanceLogs);
 
   const isPunchedIn = await fetchClockInStatus();
+  isCurrentlyPunchedIn = isPunchedIn;
 
   // Update navbar chip
-  updateNavbarChip({ ...metrics, isPunchedIn });
+  updateNavbarChip({
+    grossMs: runningGrossMs,
+    effectiveMs: runningEffectiveMs,
+    breakMs: Math.max(0, runningGrossMs - runningEffectiveMs),
+    expectedCheckout: metrics.expectedCheckout,
+    isPunchedIn,
+  });
   updateProfilePunchBadge(isPunchedIn);
 
   // Check for notification
@@ -1252,7 +1262,8 @@ function ensureTimerIsRunning() {
   if (window.timeUpdateInterval) return;
 
   function tick() {
-    if (!lastTickTs || !cachedAttendanceLogs) {
+    if (!lastTickTs) {
+      lastTickTs = Date.now();
       scheduleNextTick();
       return;
     }
@@ -1269,11 +1280,7 @@ function ensureTimerIsRunning() {
     const delta = now - lastTickTs;
     lastTickTs = now;
 
-    // Effective increases only when punched in
-    const lastLog = cachedAttendanceLogs[cachedAttendanceLogs.length - 1];
-    const isPunchedIn = lastLog && lastLog.punchStatus === 0;
-
-    if (isPunchedIn) {
+    if (isCurrentlyPunchedIn) {
       runningGrossMs += delta;
       runningEffectiveMs += delta;
     }
@@ -1285,13 +1292,16 @@ function ensureTimerIsRunning() {
       expectedCheckout: cachedAttendanceLogs
         ? calculateMetricsFromApiLogs(cachedAttendanceLogs).expectedCheckout
         : "--",
-      isPunchedIn
+      isPunchedIn: isCurrentlyPunchedIn,
     });
 
-    maybeNotifyIfDone({
-      grossMs: runningGrossMs,
-      effectiveMs: runningEffectiveMs
-    }, isPunchedIn);
+    maybeNotifyIfDone(
+      {
+        grossMs: runningGrossMs,
+        effectiveMs: runningEffectiveMs,
+      },
+      isCurrentlyPunchedIn
+    );
     scheduleNextTick();
   }
 
@@ -1300,7 +1310,9 @@ function ensureTimerIsRunning() {
     window.timeUpdateInterval = setTimeout(tick, delay);
   }
 
-  lastTickTs = Date.now();
+  if (lastTickTs === null) {
+    lastTickTs = Date.now();
+  }
   tick();
 }
 
@@ -1381,7 +1393,9 @@ function initializeExtension() {
     insertNavbarChip();
 
     setUpUrlChangeMonitor();
-    ensureTimerIsRunning();
+    updateAllDisplays(true).then(() => {
+      ensureTimerIsRunning();
+    });
     setInterval(check24HourFormatToggle, 5000);
   });
 }
