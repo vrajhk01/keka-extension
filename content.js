@@ -556,15 +556,22 @@ function createNavbarChip() {
     refreshBtn.style.transition = "transform 0.5s ease";
     refreshBtn.style.transform = "rotate(360deg) scale(0.9)";
 
-    // Clear cache and force refresh
+    if (window.timeUpdateInterval) {
+      clearTimeout(window.timeUpdateInterval);
+      window.timeUpdateInterval = null;
+    }
+
+    // Reset runtime + cache
     cachedAttendanceLogs = null;
     lastFetchTime = null;
-
     lastTickTs = null;
     runningEffectiveMs = 0;
     runningGrossMs = 0;
 
     await updateAllDisplays(true);
+
+    // RESTART TIMER AFTER BASELINE IS READY
+    ensureTimerIsRunning();
 
     // Update dropdown if visible
     if (dropdown.style.opacity === "1") {
@@ -1269,9 +1276,6 @@ function ensureTimerIsRunning() {
     }
 
     if (!cachedAttendanceLogs || cachedAttendanceLogs.length === 0) {
-      runningGrossMs = 0;
-      runningEffectiveMs = 0;
-      lastTickTs = Date.now();
       scheduleNextTick();
       return;
     }
