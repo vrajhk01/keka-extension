@@ -11,12 +11,14 @@ FEATURES
 
 - Real-time tracking of effective, gross, and break time
 - Attendance logs can be seen directly on Hover, without the need to reload the whole site
-- Work completion progress bar with percentage
+- Work completion progress bar with percentageS
+- Attendance Policy can be viewed in a Simplified manner and that too with the Previous version changes
 - Browser notification when work duration is completed
 - Customizable working hours and break time handling
 - Clock In / Clock Out status indicator on profile icon
 - Manual refresh for attendance logs and clock in/out status without reloading Keka
 - Works outside Attendance page
+- You can protect your Keka page using a PIN or Fingerprint or Face and customize it accordingly
 - Adapts to Keka light/dark theme and 12/24-hour format
 
 WORK TIME SETTINGS
@@ -35,11 +37,11 @@ INSTALLATION
 5. Select the project folder
 6. Open your organization's Keka site
 7. Click on Extension icon from Top right
-8. Find "Keka" icon and Pin it (Configure default settings if needed)
+8. Find "Keka" icon (Configure default settings if needed)
 
 HOW IT WORKS
 
-- Reads attendance logs using Keka internal APIs (read-only)
+- Reads attendance logs and attendance policy using Keka internal APIs (read-only)
 - Calculates time with second-level accuracy
 - Updates UI in real time
 - Displays data via navbar chip and hover dropdown

@@ -1,426 +1,815 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Keka Shift Settings</title>
+    <meta charset="UTF-8" />
+    <title>Keka Assistant</title>
     <style>
+      *, *::before, *::after { box-sizing: border-box; }
+
       body {
-        width: 300px;
-        padding: 20px;
+        width: 320px;
         margin: 0;
+        padding: 0;
         font-family: system-ui, -apple-system, "Segoe UI", Roboto,
-          "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif,
-          "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-          "Noto Color Emoji";
-        color: #333;
-        background-color: #f5f7f9;
-      }
-
-      /* Welcome Screen Styles */
-      .welcome-container {
-        text-align: center;
-        padding: 20px;
-      }
-
-      .subtitle {
-        font-size: 11px;
-        color: #666;
-        margin-bottom: 10px;
-      }
-
-      .info-box {
-        background: #e3f6f7;
-        padding: 10px;
-        border-radius: 6px;
-        font-size: 12px;
-        margin-bottom: 15px;
-      }
-
-      .feature-list {
-        list-style: none;
-        padding: 0;
-        text-align: left;
+          "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+        color: #1e293b;
+        background: #f1f5f9;
         font-size: 13px;
-        margin-bottom: 20px;
       }
 
-      .feature-list li {
-        margin-bottom: 10px;
-      }
-
-      #continueBtn {
-        padding: 8px 18px;
-        background-color: #64c3d1;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-
-      .feature-list {
-        list-style: none;
-        padding: 0;
-      }
-
-      .feature-list li {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-        font-size: 13px;
-        margin-bottom: 12px;
-        line-height: 1.4;
-      }
-
-      .icon {
-        width: 18px;
-        height: 18px;
-        stroke: #64c3d1;
-        fill: none;
-        stroke-width: 2;
-        flex-shrink: 0;
-      }
-
-      /* Settings Panel Styles */
-      .container {
-        text-align: center;
-      }
-
-      h2 {
-        font-size: 18px;
-        color: #333;
-        margin-top: 0;
-        margin-bottom: 16px;
-        font-weight: 600;
-      }
-
-      .status {
-        font-size: 12px;
-        color: #666;
-        margin-top: 15px;
-        text-align: center;
-        padding: 8px;
-        background-color: #e9ecef;
-        border-radius: 4px;
-      }
-
-      /* Settings panel styles */
-      .settings-panel {
-        text-align: left;
-        border-radius: 8px;
-        padding: 16px;
-        border: 1px solid #e0e4e8;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        background-color: white;
-      }
-
-      .setting-group {
-        margin-bottom: 18px;
-      }
-
-      .setting-group h3 {
-        margin-top: 0;
-        margin-bottom: 10px;
-        font-size: 14px;
-        color: #333;
-        font-weight: 500;
-      }
-
-      .form-group {
-        margin-bottom: 15px;
-      }
-
-      .form-group label {
+      /* ── Header ── */
+      .popup-header {
+        background: linear-gradient(135deg, #0e7490, #64c3d1);
+        padding: 14px 16px 12px;
         display: flex;
         align-items: center;
-        margin-bottom: 5px;
-        font-size: 14px;
-        font-weight: 400;
+        gap: 10px;
+      }
+      .popup-header-icon {
+        width: 32px; height: 32px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 8px;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+      }
+      .popup-header-text h1 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+        line-height: 1.2;
+      }
+      .popup-header-text p {
+        margin: 2px 0 0;
+        font-size: 11px;
+        color: rgba(255,255,255,0.75);
       }
 
-      .form-group label input[type="checkbox"] {
-        margin-right: 8px;
-        width: 16px;
-        height: 16px;
-        accent-color: #64c3d1;
+      /* ── Status bar ── */
+      .status-bar {
+        font-size: 11px;
+        padding: 5px 12px;
+        text-align: center;
+        font-weight: 500;
+        background: #e2e8f0;
+        color: #64748b;
+        border-bottom: 1px solid #cbd5e1;
+      }
+      .status-bar.connected    { background:#dcfce7; color:#15803d; border-color:#bbf7d0; }
+      .status-bar.disconnected { background:#fee2e2; color:#b91c1c; border-color:#fecaca; }
+
+      /* ── Tab Navigation ── */
+      .tab-nav {
+        display: flex;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .tab-btn {
+        flex: 1;
+        padding: 9px 4px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 500;
+        color: #94a3b8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        border-bottom: 2px solid transparent;
+        transition: color 0.15s, border-color 0.15s;
+        font-family: inherit;
+      }
+      .tab-btn svg { opacity: 0.5; transition: opacity 0.15s; }
+      .tab-btn.active { color: #0e7490; border-bottom-color: #64c3d1; }
+      .tab-btn.active svg { opacity: 1; }
+      .tab-btn:hover:not(.active) { color: #475569; }
+
+      /* ── Tab Panels ── */
+      .tab-panel { display: none; padding: 14px 14px 12px; }
+      .tab-panel.active { display: block; }
+
+      /* ── Section label ── */
+      .section-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: #94a3b8;
+        margin: 0 0 6px;
       }
 
+      /* ── Card ── */
+      .card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 10px;
+      }
+
+      /* ── Form controls ── */
+      .form-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .form-label {
+        font-size: 13px;
+        color: #334155;
+        font-weight: 500;
+        display: flex; align-items: center; gap: 6px;
+      }
       .time-inputs {
         display: flex;
         align-items: center;
-        margin-top: 8px;
+        gap: 5px;
       }
-
       .time-inputs input[type="number"] {
-        width: 60px;
-        padding: 8px;
-        border: 1px solid #e0e4e8;
-        border-radius: 4px;
-        margin-right: 8px;
-        font-size: 14px;
+        width: 50px;
+        padding: 5px 6px;
+        border: 1px solid #e2e8f0;
+        border-radius: 5px;
+        font-size: 13px;
+        text-align: center;
+        background: #f8fafc;
+        color: #1e293b;
+        transition: border-color 0.15s, box-shadow 0.15s;
       }
-
       .time-inputs input[type="number"]:focus {
         outline: none;
         border-color: #64c3d1;
-        box-shadow: 0 0 0 2px rgba(100, 195, 209, 0.2);
+        box-shadow: 0 0 0 2px rgba(100,195,209,0.2);
+        background: white;
       }
-
-      .time-inputs input[type="number"] {
-        transition: border-color 0.2s, box-shadow 0.2s;
+      .time-inputs input[type="number"]:disabled {
+        background: #f1f5f9; color: #94a3b8; cursor: not-allowed;
       }
+      .time-inputs span { font-size: 11px; color: #64748b; }
 
-      .time-inputs span {
-        margin-right: 15px;
-        font-size: 14px;
-        color: #444;
+      /* Toggle switch */
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #f1f5f9;
       }
+      .toggle-row:last-child { border-bottom: none; padding-bottom: 0; }
+      .toggle-row:first-child { padding-top: 0; }
+      .toggle-label { font-size: 12.5px; color: #334155; line-height: 1.3; }
+      .toggle-label small { display: block; font-size: 10.5px; color: #94a3b8; margin-top: 1px; }
 
-      .hint {
-        font-size: 11px;
-        color: #666;
-        margin-top: 5px;
+      .toggle { position: relative; width: 34px; height: 19px; flex-shrink: 0; }
+      .toggle input { opacity: 0; width: 0; height: 0; }
+      .toggle-track {
+        position: absolute; inset: 0;
+        background: #cbd5e1;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.2s;
       }
-
-      .buttons {
-        margin-top: 20px;
-        text-align: center;
+      .toggle-track::after {
+        content: '';
+        position: absolute;
+        top: 2px; left: 2px;
+        width: 15px; height: 15px;
+        border-radius: 50%;
+        background: white;
+        transition: transform 0.2s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       }
+      .toggle input:checked + .toggle-track { background: #64c3d1; }
+      .toggle input:checked + .toggle-track::after { transform: translateX(15px); }
 
-      .buttons button {
-        padding: 8px 18px;
-        background-color: #64c3d1;
+      /* Primary button */
+      .btn-primary {
+        width: 100%;
+        padding: 8px;
+        background: #0e7490;
         color: white;
         border: none;
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background-color 0.2s;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: inherit;
+        transition: background 0.15s;
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+      }
+      .btn-primary:hover { background: #0c6177; }
+      .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      .save-feedback {
+        font-size: 11px; text-align: center;
+        height: 16px; margin-top: 6px;
+        color: #15803d; font-weight: 500;
       }
 
-      .buttons button:hover {
-        background-color: #4aaab8;
+      /* ── PIN Lock panel ── */
+      .pl-status-row {
+        display: flex; align-items: center; gap: 8px;
+        padding: 10px 12px;
+        background: white; border: 1px solid #e2e8f0;
+        border-radius: 8px; margin-bottom: 10px;
       }
-
-      .divider {
-        border-top: 1px solid #e0e4e8;
-        margin: 15px 0;
+      .pl-dot {
+        width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+        background: #cbd5e1; transition: background 0.3s, box-shadow 0.3s;
       }
-
-      input[type="number"]:disabled {
-        background-color: #f5f7f9;
-        cursor: not-allowed;
-        opacity: 0.7;
+      .pl-dot.active { background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.15); }
+      .pl-dot.locked { background: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.15); }
+      .pl-status-text { flex: 1; }
+      .pl-status-text strong { display: block; font-size: 12.5px; color: #1e293b; }
+      .pl-status-text span   { font-size: 11px; color: #64748b; }
+      .pl-badge {
+        font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px;
+        letter-spacing: 0.3px; text-transform: uppercase;
       }
-
-      input[type="number"]:not(:disabled) {
-        background-color: white;
+      .pl-badge.on  { background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; }
+      .pl-badge.off { background:#f1f5f9; color:#64748b; border:1px solid #e2e8f0; }
+      .field-label { font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 5px; display: block; }
+      .pin-field {
+        width: 100%; padding: 7px 10px; border: 1px solid #e2e8f0; border-radius: 6px;
+        font-size: 20px; letter-spacing: 6px; background: #f8fafc; color: #1e293b;
+        outline: none; transition: border-color 0.15s, box-shadow 0.15s; font-family: monospace;
       }
-
-      #editDurationIcon:hover {
-        transform: scale(1.1);
+      .pin-field:focus { border-color: #64c3d1; box-shadow: 0 0 0 2px rgba(100,195,209,0.2); background: white; }
+      .pin-field::placeholder { letter-spacing: 1px; font-size: 12px; color: #94a3b8; font-family: inherit; }
+      .idle-select {
+        width: 100%; padding: 7px 28px 7px 10px; border: 1px solid #e2e8f0; border-radius: 6px;
+        font-size: 13px; background: #f8fafc; color: #1e293b; outline: none; cursor: pointer;
+        font-family: inherit; transition: border-color 0.15s; appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 10px center;
       }
-
-      #editDurationIcon.editing {
-        color: #22c55e;
+      .idle-select:focus { border-color: #64c3d1; box-shadow: 0 0 0 2px rgba(100,195,209,0.2); }
+      .btn-danger {
+        width: 100%; padding: 7px; background: white; color: #dc2626;
+        border: 1px solid #fecaca; border-radius: 6px; cursor: pointer;
+        font-size: 12px; font-weight: 500; font-family: inherit;
+        display: flex; align-items: center; justify-content: center; gap: 5px;
+        transition: background 0.15s; margin-top: 6px;
       }
+      .btn-danger:hover { background: #fef2f2; }
+      .pl-msg { font-size: 11px; color: #64748b; text-align: center; min-height: 15px; margin-top: 6px; }
+      .pl-msg.success { color: #15803d; }
+      .pl-msg.error   { color: #dc2626; }
 
-      .footer {
-        margin-top: 12px;
+      /* ── Welcome Screen ── */
+      .welcome-hero {
+        background: linear-gradient(135deg, #0e7490, #64c3d1);
+        padding: 24px 20px 20px;
         text-align: center;
       }
-
-      .footer a {
-        font-size: 12px;
-        color: #64c3d1;
-        text-decoration: none;
-        font-weight: 500;
-        cursor: pointer;
+      .welcome-hero-icon {
+        width: 52px; height: 52px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 14px;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 12px;
       }
+      .welcome-hero h1 { margin: 0 0 6px; font-size: 18px; font-weight: 700; color: white; }
+      .welcome-hero p  { margin: 0; font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.5; }
 
-      .footer a:hover {
-        text-decoration: underline;
+      .welcome-features { padding: 10px 14px 4px; }
+      .feature-item {
+        display: flex; align-items: flex-start; gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid #f1f5f9;
       }
+      .feature-item:last-child { border-bottom: none; }
+      .feature-icon {
+        width: 28px; height: 28px; border-radius: 7px;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; margin-top: 1px;
+      }
+      .fi-teal   { background: #e0f7fa; }
+      .fi-blue   { background: #eff6ff; }
+      .fi-green  { background: #f0fdf4; }
+      .fi-orange { background: #fff7ed; }
+
+      .feature-text strong { display: block; font-size: 12.5px; font-weight: 600; color: #1e293b; margin-bottom: 1px; }
+      .feature-text span   { font-size: 11px; color: #64748b; line-height: 1.4; }
+
+      .welcome-footer { padding: 10px 14px 14px; display: flex; flex-direction: column; gap: 8px; }
+      .btn-continue {
+        width: 100%; padding: 10px;
+        background: #0e7490; color: white;
+        border: none; border-radius: 8px;
+        cursor: pointer; font-size: 14px; font-weight: 600;
+        font-family: inherit;
+        transition: background 0.15s;
+      }
+      .btn-continue:hover { background: #0c6177; }
+
+      .link-github {
+        display: block; text-align: center;
+        font-size: 11px; color: #64c3d1;
+        text-decoration: none; cursor: pointer; font-weight: 500;
+      }
+      .link-github:hover { text-decoration: underline; }
+
+      #editDurationIcon {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 18px; height: 18px; cursor: pointer; transition: transform 0.15s; flex-shrink: 0;
+      }
+      #editDurationIcon:hover { transform: scale(1.15); }
+
+      /* ── PIN Gate overlay ── */
+      #mainApp { position: relative; }
+      @keyframes pg-shake {
+        0%,100% { transform: translateX(0); }
+        20%      { transform: translateX(-7px); }
+        40%      { transform: translateX(7px); }
+        60%      { transform: translateX(-4px); }
+        80%      { transform: translateX(4px); }
+      }
+      #pg-pin-input {
+        width: 100%; padding: 8px 10px;
+        border: 1px solid #e2e8f0; border-radius: 8px;
+        font-size: 22px; letter-spacing: 8px; text-align: center;
+        background: #f8fafc; color: #1e293b; outline: none;
+        font-family: monospace;
+        transition: border-color 0.15s, box-shadow 0.15s;
+      }
+      #pg-pin-input:focus {
+        border-color: #64c3d1;
+        box-shadow: 0 0 0 2px rgba(100,195,209,0.2);
+        background: white;
+      }
+      #pg-pin-input::placeholder { letter-spacing: 1px; font-size: 12px; color: #94a3b8; font-family: inherit; }
     </style>
   </head>
   <body>
-    <!-- Welcome Screen -->
-    <div class="welcome-container" id="welcomeScreen">
-      <h2>Welcome to Keka Real-Time Tracker</h2>
 
-      <p class="subtitle">
-        Track your working hours accurately without waiting for Keka to refresh.
-      </p>
-
-      <div class="info-box">
-        You can change all default settings anytime from the settings panel.
+    <!-- ══ WELCOME SCREEN ══ -->
+    <div id="welcomeScreen">
+      <div class="welcome-hero">
+        <div class="welcome-hero-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+            stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <h1>Keka Assistant</h1>
+        <p>Smart time tracking &amp; account<br>protection for your Keka workspace</p>
       </div>
 
-      <ul class="feature-list">
-        <li>
-          <svg class="icon" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-          Track your working hours in real time with live updates
-        </li>
-
-        <li>
-          <svg class="icon" viewBox="0 0 24 24">
-            <polyline points="23 4 23 10 17 10"></polyline>
-            <polyline points="1 20 1 14 7 14"></polyline>
-            <path d="M3.51 9a9 9 0 0114.13-3.36L23 10"></path>
-            <path d="M20.49 15a9 9 0 01-14.13 3.36L1 14"></path>
-          </svg>
-          Attendance logs update instantly. No page reload required
-        </li>
-
-        <li>
-          <svg class="icon" viewBox="0 0 24 24">
-            <path d="M20 21v-2a4 4 0 00-3-3.87"></path>
-            <path d="M4 21v-2a4 4 0 013-3.87"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          Track time continuously, even outside the Attendance page
-        </li>
-
-        <li>
-          <svg class="icon" viewBox="0 0 24 24">
-            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          Check Punch In / Punch Out status directly from your profile icon
-        </li>
-
-        <li>
-          <svg class="icon" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path
-              d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33"
-            ></path>
-            <path
-              d="M4.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33"
-            ></path>
-          </svg>
-          Set your own working hours and break duration
-        </li>
-
-        <li>
-          <svg class="icon" viewBox="0 0 24 24">
-            <path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 01-3.46 0"></path>
-          </svg>
-          Receive browser notifications when your work time is completed
-        </li>
-      </ul>
-
-      <button id="continueBtn">Continue</button>
-
-      <div class="footer">
-        <a id="githubLinkWelcome">View source on GitHub</a>
-      </div>
-    </div>
-
-    <!-- Settings Panel -->
-    <div class="settings-panel" id="settingsPanel">
-      <h2>Work Time Settings</h2>
-      <p class="subtitle">
-        Customize your working hours, breaks, and notifications
-      </p>
-
-      <div class="setting-group">
-        <div class="form-group">
-          <label style="justify-content: space-between; cursor: pointer">
-            <span style="display: flex; align-items: center; gap: 8px">
-              Work Duration:
-              <span
-                id="editDurationIcon"
-                style="
-                  display: inline-flex;
-                  align-items: center;
-                  justify-content: center;
-                  width: 20px;
-                  height: 20px;
-                  cursor: pointer;
-                  transition: transform 0.2s;
-                "
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#64c3d1"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                  ></path>
-                  <path
-                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                  ></path>
-                </svg>
-              </span>
-            </span>
-          </label>
-          <div class="time-inputs">
-            <input
-              type="number"
-              id="workHours"
-              min="0"
-              max="12"
-              step="1"
-              disabled
-            />
-            <span>hours</span>
-            <input
-              type="number"
-              id="workMinutes"
-              min="0"
-              max="59"
-              step="1"
-              disabled
-            />
-            <span>minutes</span>
+      <div class="welcome-features">
+        <div class="feature-item">
+          <div class="feature-icon fi-teal">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="#0e7490" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <strong>Live Time Tracking</strong>
+            <span>Effective, gross &amp; break time updated every second</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon fi-blue">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0114.13-3.36L23 10"/>
+              <path d="M20.49 15a9 9 0 01-14.13 3.36L1 14"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <strong>Instant Log Sync</strong>
+            <span>Attendance logs refresh without reloading the page</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon fi-green">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 01-3.46 0"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <strong>Completion Alerts</strong>
+            <span>Browser notification when your work hours are done</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon fi-orange">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="#ea580c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <strong>Auto PIN Lock</strong>
+            <span>Blurs &amp; locks the tab on idle. Unlock with your PIN.</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon" style="background:#fef3c7;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <strong>Attendance Policy Summarized</strong>
+            <span>View your penalisation &amp; time tracking policy at a glance with change alerts</span>
           </div>
         </div>
       </div>
 
-      <div class="divider"></div>
+      <div class="welcome-footer">
+        <button class="btn-continue" id="continueBtn">Get Started</button>
+        <a class="link-github" id="githubLinkWelcome">View source on GitHub</a>
+      </div>
+    </div><!-- /welcomeScreen -->
 
-      <div class="form-group">
-        <label>
-          <input type="checkbox" id="isBreakTimeIncludedInWorkingHours" />
-          Including Break?
-        </label>
-        <p class="subtitle">
-          By default, Break time is not included in Work duration
-        </p>
-        <p class="subtitle">
-          Check &#10003; if above Work duration includes Break time
-        </p>
+
+    <!-- ══ MAIN APP ══ -->
+    <div id="mainApp" style="display:none;">
+
+      <div class="popup-header">
+        <div class="popup-header-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="popup-header-text">
+          <h1>Keka Assistant</h1>
+          <p>Time Tracker &amp; PIN Lock</p>
+        </div>
       </div>
 
-      <div class="divider"></div>
+      <div class="status-bar" id="status">Checking connection…</div>
 
-      <div class="form-group">
-        <label>
-          <input type="checkbox" id="isNotificationEnabled" checked />
-          Receive Notification on Time completion
-        </label>
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-tracker">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Time Tracker
+        </button>
+        <button class="tab-btn" data-tab="tab-security">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Security
+        </button>
       </div>
 
-      <div class="buttons">
-        <button id="saveSettings">Save Settings</button>
+      <!-- ══ PIN GATE OVERLAY ══
+           Covers the full mainApp when user tries to open PIN Lock or Face Guard tab.
+           Hidden by default; shown by popup.js when PIN is configured and not yet verified.
+      -->
+      <div id="pin-gate" style="display:none;position:absolute;inset:0;z-index:200;background:rgba(241,245,249,0.97);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:20px;">
+        <div id="pg-card" style="width:100%;background:white;border:1px solid #e2e8f0;border-radius:14px;padding:22px 18px 16px;display:flex;flex-direction:column;align-items:center;gap:12px;box-shadow:0 8px 28px rgba(0,0,0,0.1);">
+
+          <!-- Icon -->
+          <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#e0f7fa,#b2ebf2);border:1.5px solid rgba(14,116,144,0.25);display:flex;align-items:center;justify-content:center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0e7490" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+
+          <!-- Title -->
+          <div style="text-align:center;">
+            <div id="pg-section-name" style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:3px;">Verify Your PIN</div>
+            <div style="font-size:11.5px;color:#64748b;line-height:1.5;">Enter your main PIN to access this section</div>
+          </div>
+
+          <!-- PIN input -->
+          <input id="pg-pin-input" type="password" maxlength="8"
+            inputmode="numeric" pattern="[0-9]*"
+            placeholder="••••" autocomplete="current-password" />
+
+          <!-- Error message -->
+          <div id="pg-msg" style="font-size:11px;color:#ef4444;min-height:14px;text-align:center;width:100%;margin-top:-4px;font-weight:500;"></div>
+
+          <!-- Actions -->
+          <button id="pg-submit" class="btn-primary" style="width:100%;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Verify &amp; Continue
+          </button>
+          <button id="pg-cancel" style="background:none;border:none;cursor:pointer;font-size:11px;color:#94a3b8;font-family:inherit;padding:2px 8px;margin-top:-4px;">Cancel</button>
+        </div>
       </div>
 
-      <div class="footer">
-        <a id="githubLinkSettings">View source on GitHub</a>
-      </div>
-    </div>
+      <!-- Tab: Time Tracker -->
+      <div class="tab-panel active" id="tab-tracker">
+        <p class="section-label">Work Duration</p>
+        <div class="card">
+          <div class="form-row">
+            <div class="form-label">
+              Duration
+              <span id="editDurationIcon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="#64c3d1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </span>
+            </div>
+            <div class="time-inputs">
+              <input type="number" id="workHours" min="0" max="12" step="1" disabled />
+              <span>hr</span>
+              <input type="number" id="workMinutes" min="0" max="59" step="1" disabled />
+              <span>min</span>
+            </div>
+          </div>
+        </div>
 
-    <div class="status" id="status">Waiting for Keka page...</div>
+        <p class="section-label">Preferences</p>
+        <div class="card">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              Include Break in Duration
+              <small>Count break time as part of work hours</small>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="isBreakTimeIncludedInWorkingHours" />
+              <div class="toggle-track"></div>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">
+              Completion Notification
+              <small>Alert when work time target is reached</small>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="isNotificationEnabled" checked />
+              <div class="toggle-track"></div>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">
+              Attendance Policy Summarized
+              <small>Show quick-access icon in the navbar</small>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="showPolicyIcon" checked />
+              <div class="toggle-track"></div>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="saveSettings">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          Save Settings
+        </button>
+        <div class="save-feedback" id="save-feedback"></div>
+        <div style="text-align:center; margin-top:10px;">
+          <a class="link-github" id="githubLinkSettings">View source on GitHub</a>
+        </div>
+      </div>
+
+      <!-- Tab: Security (PIN Lock + Face Guard combined) -->
+      <div class="tab-panel" id="tab-security">
+
+        <!-- ════════════ PIN LOCK SECTION ════════════ -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <div style="width:26px;height:26px;border-radius:7px;background:#e0f7fa;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0e7490" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <span style="font-size:12px;font-weight:700;color:#0e7490;text-transform:uppercase;letter-spacing:0.5px;">PIN Lock</span>
+        </div>
+
+        <div class="pl-status-row">
+          <div class="pl-dot" id="pl-dot"></div>
+          <div class="pl-status-text">
+            <strong id="pl-status-title">Not Configured</strong>
+            <span id="pl-status-sub">Set a PIN to protect this tab</span>
+          </div>
+          <span class="pl-badge off" id="pl-badge">OFF</span>
+        </div>
+
+        <!-- Setup form -->
+        <div id="pl-setup-form">
+          <p class="section-label">Configure Lock</p>
+          <div class="card" style="display:flex;flex-direction:column;gap:10px;">
+            <div>
+              <label class="field-label" for="pl-pin-input">Main PIN (4 to 8 digits)</label>
+              <input class="pin-field" type="password" id="pl-pin-input"
+                maxlength="8" inputmode="numeric" pattern="[0-9]*"
+                placeholder="Enter your PIN" autocomplete="new-password" />
+            </div>
+            <div>
+              <label class="field-label" for="pl-backup-input">
+                Backup PIN
+                <span style="font-weight:400;color:#94a3b8;font-size:10px;margin-left:4px;">for recovery if you forget main PIN</span>
+              </label>
+              <input class="pin-field" type="password" id="pl-backup-input"
+                maxlength="8" inputmode="numeric" pattern="[0-9]*"
+                placeholder="Enter a different PIN" autocomplete="new-password" />
+            </div>
+            <div class="toggle-row" id="pl-bio-row" style="display:none;">
+              <div class="toggle-label">
+                Use Fingerprint / Windows Hello
+                <small>Biometric prompt shown automatically on lock</small>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="pl-bio-toggle" />
+                <div class="toggle-track"></div>
+              </label>
+            </div>
+            <div>
+              <label class="field-label" for="pl-idle-select">Lock after idle</label>
+              <select class="idle-select" id="pl-idle-select">
+                <option value="0">Immediately</option>
+                <option value="1" selected>1 minute ✦ Recommended</option>
+                <option value="2">2 minutes</option>
+                <option value="3">3 minutes</option>
+                <option value="5">5 minutes</option>
+                <option value="10">10 minutes</option>
+                <option value="15">15 minutes</option>
+                <option value="30">30 minutes</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-primary" id="pl-btn-set">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            Enable PIN Lock
+          </button>
+        </div>
+
+        <!-- Active controls (shown when PIN lock is enabled) -->
+        <div id="pl-active-controls" style="display:none;">
+          <p class="section-label">Settings</p>
+          <div class="card" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px;">
+            <div>
+              <label class="field-label" for="pl-idle-edit">Lock after idle</label>
+              <select class="idle-select" id="pl-idle-edit">
+                <option value="0">Immediately</option>
+                <option value="1">1 minute ✦ Recommended</option>
+                <option value="2">2 minutes</option>
+                <option value="3">3 minutes</option>
+                <option value="5">5 minutes</option>
+                <option value="10">10 minutes</option>
+                <option value="15">15 minutes</option>
+                <option value="30">30 minutes</option>
+              </select>
+            </div>
+            <button class="btn-primary" id="pl-btn-save-settings" style="padding:8px 12px;font-size:12px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Save Settings
+            </button>
+          </div>
+
+          <p class="section-label">Actions</p>
+          <button class="btn-primary" id="pl-btn-lock-now">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            Lock Now
+          </button>
+          <button class="btn-danger" id="pl-btn-clear">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14H6L5 6"/>
+              <path d="M10 11v6M14 11v6"/>
+              <path d="M9 6V4h6v2"/>
+            </svg>
+            Remove PIN &amp; Disable
+          </button>
+        </div>
+
+        <div class="pl-msg" id="pl-msg"></div>
+
+        <div class="card" style="margin-top:10px;padding:10px 12px;">
+          <p style="margin:0;font-size:11px;color:#64748b;line-height:1.7;">
+            <strong style="color:#334155;">How it works:</strong>
+            After the idle timeout the tab blurs and shows a lock screen.
+            If your PC supports it, a <strong style="color:#334155;">biometric prompt</strong> (fingerprint/face/Windows Hello)
+            appears automatically — just touch the sensor to unlock instantly.
+            Otherwise enter your PIN. Forgot your PIN? Use the
+            <strong style="color:#334155;">Backup PIN</strong> on the lock screen to reset.
+          </p>
+        </div>
+
+        <!-- ════════════ SECTION DIVIDER ════════════ -->
+        <div style="display:flex;align-items:center;gap:8px;margin:16px 0 14px;">
+          <div style="flex:1;height:1px;background:#e2e8f0;"></div>
+          <div style="width:6px;height:6px;border-radius:50%;background:#cbd5e1;flex-shrink:0;"></div>
+          <div style="flex:1;height:1px;background:#e2e8f0;"></div>
+        </div>
+
+        <!-- ════════════ FACE GUARD SECTION ════════════ -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <div style="width:26px;height:26px;border-radius:7px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+          <span style="font-size:12px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:0.5px;">Face Guard</span>
+        </div>
+
+        <!-- Status card -->
+        <div class="card" style="display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:10px;">
+          <div id="fg-dot" style="width:10px;height:10px;border-radius:50%;background:#6b7280;flex-shrink:0;transition:background 0.3s;"></div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span id="fg-status-title" style="font-size:13px;font-weight:600;color:#1e293b;">Face Guard</span>
+              <span id="fg-badge" style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:#e2e8f0;color:#64748b;">OFF</span>
+            </div>
+            <div id="fg-status-sub" style="font-size:11px;color:#64748b;margin-top:1px;">No face registered</div>
+          </div>
+        </div>
+
+        <!-- PIN Lock prerequisite notice (shown when PIN is not set) -->
+        <div id="fg-pin-notice" style="display:none;background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:flex-start;gap:8px;">
+          <svg style="flex-shrink:0;margin-top:1px;" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <p style="margin:0;font-size:11px;color:#92400e;line-height:1.6;">
+            <strong>PIN Lock required.</strong> Face Guard works on top of PIN Lock — just like Face ID on a phone needs a passcode. Please set up <strong>PIN Lock</strong> first using the section above.
+          </p>
+        </div>
+
+        <!-- Register section (shown when not enrolled) -->
+        <div id="fg-register-section">
+          <p class="section-label">Register Your Face</p>
+          <div class="card" style="padding:12px 14px;">
+            <p style="margin:0 0 10px;font-size:12px;color:#64748b;line-height:1.6;">
+              Face your camera in good lighting. The Keka tab will open a camera preview and capture your face automatically.
+            </p>
+            <button id="fg-btn-register" class="btn-primary" style="width:100%;">
+              Register My Face
+            </button>
+          </div>
+        </div>
+
+        <!-- Active controls (shown when enrolled) -->
+        <div id="fg-active-section" style="display:none;">
+          <p class="section-label">Face Guard Active</p>
+          <div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:8px;">
+            <button id="fg-btn-reregister" class="btn-primary" style="width:100%;">Re-register Face</button>
+            <button id="fg-btn-clear-face" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid #e2e8f0;background:white;color:#ef4444;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Clear Face Data</button>
+          </div>
+        </div>
+
+        <!-- Message area -->
+        <div id="fg-msg" style="margin:6px 0;font-size:12px;min-height:16px;text-align:center;font-weight:500;"></div>
+
+        <!-- Intruder log -->
+        <p class="section-label" style="margin-top:10px;">Intruder Log</p>
+        <div class="card" style="padding:10px 12px;">
+          <div id="fg-intruder-empty" style="font-size:12px;color:#94a3b8;text-align:center;padding:8px 0;">No intruder images captured</div>
+          <div id="fg-intruder-grid" style="display:none;grid-template-columns:repeat(3,1fr);gap:6px;"></div>
+          <button id="fg-btn-clear-log" style="display:none;width:100%;margin-top:10px;padding:7px 12px;border-radius:8px;border:1px solid #e2e8f0;background:white;color:#ef4444;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;">Clear All Images</button>
+        </div>
+
+        <!-- Info card -->
+        <div class="card" style="margin-top:10px;padding:10px 12px;margin-bottom:4px;">
+          <p style="margin:0;font-size:11px;color:#64748b;line-height:1.7;">
+            <strong style="color:#334155;">How it works:</strong>
+            On every page load, the camera activates on the lock screen.
+            If <strong style="color:#334155;">your face</strong> is recognized — the screen unlocks automatically.
+            If an <strong style="color:#334155;">unknown face</strong> is detected, a photo is captured and saved here.
+            PIN always works as a fallback.
+          </p>
+        </div>
+
+        <!-- Lightbox overlay (hidden by default) -->
+        <div id="fg-lightbox" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+          <img id="fg-lightbox-img" style="max-width:280px;max-height:280px;border-radius:12px;border:2px solid rgba(255,255,255,0.15);" />
+          <div id="fg-lightbox-ts" style="font-size:11px;color:#94a3b8;"></div>
+          <button id="fg-lightbox-close" style="margin-top:4px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:white;font-size:12px;padding:6px 16px;cursor:pointer;font-family:inherit;">Close</button>
+        </div>
+
+      </div><!-- /tab-security -->
+
+    </div><!-- /mainApp -->
 
     <script src="popup.js"></script>
   </body>

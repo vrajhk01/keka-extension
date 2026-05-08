@@ -14,9 +14,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const lastFetchTime = tabFetchTimestamps.get(tabId) || 0;
     const now = Date.now();
 
-    if (now - lastFetchTime < FETCH_COOLDOWN) {
-      return;
-    }
+    if (now - lastFetchTime < FETCH_COOLDOWN) return;
 
     tabFetchTimestamps.set(tabId, now);
 
