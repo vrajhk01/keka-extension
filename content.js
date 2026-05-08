@@ -1654,7 +1654,7 @@ function injectPolicyStyles() {
       animation: keka-policy-blink 1.6s ease-in-out infinite;
     }
     nav.navbar form.ml-40 {
-      margin-left: 20px !important;
+      margin-left: 11px !important;
     }
     #keka-policy-panel {
       scrollbar-width: thin;
